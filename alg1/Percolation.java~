@@ -1,0 +1,370 @@
+
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+    
+public class Percolation 
+{   
+   private WeightedQuickUnionUF wqu_uf_;      
+
+   private int grid_size_;
+   private int vsite_top_index_;
+   private int vsite_bottom_index_;
+   
+   // site can be closed(default) or open, 
+   private enum state { close, open };
+   
+   // NxN grid of sites 
+   private state grid_[][];
+ 
+   //
+   //  Public ===================================================================
+   //
+   
+   // create n-by-n grid, with all sites blocked
+   public Percolation(int n)                
+   {
+       grid_size_ = n;
+       
+       // init site grid as closed
+       grid_ = new state [grid_size_] [grid_size_];
+       for(int i=0; i < grid_size_; ++i)
+       {
+           for(int j=0; j < grid_size_; ++j)
+           {
+               grid_[i][j] = state.close;
+           }
+       }
+       
+       // setup weighted union find array
+       wqu_uf_ = new WeightedQuickUnionUF( grid_size_ * grid_size_ + 2 ); // add two virtual nodes
+       
+       // last node of grid
+       int last_node = (grid_size_ * grid_size_) -1;
+       vsite_top_index_ = last_node + 1;
+       vsite_bottom_index_ = vsite_top_index_ + 1;
+       
+       // connect top row of site to top virual node
+       for(int i=0; i < grid_size_; ++i)
+       {
+           wqu_uf_.union(i, vsite_top_index_); 
+       }
+       
+       // connect bottom row of site to bottom virtual node
+       for(int i=last_node-grid_size_; i <= last_node; ++i)
+       {
+           wqu_uf_.union(i, vsite_bottom_index_); 
+       }
+   }
+   
+   public void open(int row, int col)    // open site (row, col) if it is not open already
+   {
+       validate_and_throw(row, col);
+       
+       // open site
+       grid_[row][col] = state.open;
+       
+       
+       update_uf_internal_state(row, col);
+   }
+   
+   public boolean isOpen(int row, int col)  // is site (row, col) open?
+   {
+       validate_and_throw(row, col);
+
+       return grid_[row][col] == state.open;
+   }
+     
+   public boolean isFull(int row, int col)  // is site (row, col) full?
+   {
+       validate_and_throw(row, col);       
+       
+       return !isOpen(row, col);
+   }
+     
+   public int numberOfOpenSites()       // number of open sites
+   {
+       int count_open_sites = 0;
+       for(int i = 0; i < grid_size_; ++i)
+       {
+           for(int j = 0; j < grid_size_; ++j)
+           {
+               count_open_sites += (grid_[i][j] == state.open ? 1 : 0);
+           }
+       }
+       return count_open_sites;
+   }
+   
+   public boolean percolates()              // does the system percolate?
+   {
+     // check if virtual nodes are connected
+     return wqu_uf_.connected(vsite_top_index_, vsite_bottom_index_);
+   }
+   
+   //
+   //  Internal ===================================================================
+   //
+      
+   private boolean validate_input(int row, int col)
+   {
+      if ((row < 0) || (row >= grid_size_) || (col < 0) || (col >= grid_size_) )
+      {
+          return false;
+      }
+      return true;
+   }
+   
+   private void validate_and_throw(int row, int col)
+   {
+       if( !validate_input( row,  col) )
+           throw new IllegalArgumentException("Index is not between 0 and " + (grid_size_ - 1));       
+   }
+
+   private int get_site_index(int row, int col)
+   {
+       return row*grid_size_+col;
+   }
+   
+   private void debug_log(String msg)
+   {
+       // StdOut.println(msg);
+   }
+   
+   private void update_uf_internal_state(int row, int col)
+   {
+       int site0 = get_site_index(row, col);
+       
+       // up
+       int site1 = get_site_index(row-1, col);
+       if(validate_input(row-1, col) && grid_[row-1][col] == state.open)
+       {           
+           debug_log("calling wqu_uf_.union(" + site0 + "," + site1 + ")");
+           wqu_uf_.union(site0, site1);
+       }
+              
+       // down
+       site1 = get_site_index(row+1, col);
+       if(validate_input(row+1, col) && grid_[row+1][col] == state.open)
+       {
+           debug_log("calling wqu_uf_.union(" + site0 + "," + site1 + ")");
+           wqu_uf_.union(site0, site1);
+       }
+       
+       // left
+       site1 = get_site_index(row, col-1);
+       if(validate_input(row, col-1) && grid_[row][col-1] == state.open)
+       {
+           debug_log("calling wqu_uf_.union(" + site0 + "," + site1 + ")");
+           wqu_uf_.union(site0, site1);
+       }
+       
+       // right
+       site1 = get_site_index(row, col+1);
+       if(validate_input(row, col+1) && grid_[row][col+1] == state.open)
+       {
+           debug_log("calling wqu_uf_.union(" + site0 + "," + site1 + ")");
+           wqu_uf_.union(site0, site1);
+       }   
+   }
+   
+   public WeightedQuickUnionUF Debug_Get_WQU_UF()
+   {
+       return wqu_uf_;
+   }
+   
+   public void Debug_Dump_Grid_State()
+   {       
+       for(int i=0; i < grid_size_; ++i)
+       {
+           for(int j=0; j < grid_size_; ++j)
+           {               
+               StdOut.print( grid_[i][j] == state.open ? "(V)" : "(~)" );   
+           }
+           StdOut.println("");
+       }   
+   }
+   
+   //
+   //  Unit Tests ===================================================================
+   //
+
+   public static void UT_Test1()
+   {
+       WeightedQuickUnionUF wqu_uf = new WeightedQuickUnionUF(5);       
+       StdOut.println("TEST(WeightedQuickUnionUF): Is connected(expected: false), actual: "+wqu_uf.connected(0,4));
+       wqu_uf.union(0,1);
+       wqu_uf.union(1,2);
+       wqu_uf.union(2,3);
+       wqu_uf.union(3,4);
+       StdOut.println("TEST(WeightedQuickUnionUF): Is connected(expected: true), actual: "+wqu_uf.connected(0,4));          
+   }
+   
+   public static void UT_Test2()
+   {
+       int grid_size = 3;
+       Percolation percltn = new Percolation(grid_size);       
+       int last_node = grid_size*grid_size-1;
+       
+       WeightedQuickUnionUF wqu_uf = percltn.Debug_Get_WQU_UF();
+       StdOut.println("TEST -2: Is connected(expected: true), actual: " + wqu_uf.connected(0,last_node+1));       
+       StdOut.println("TEST -2: Is connected(expected: true), actual: " + wqu_uf.connected(1,last_node+1)); 
+       StdOut.println("TEST -2: Is connected(expected: true), actual: " + wqu_uf.connected(2,last_node+1)); 
+
+       int last_row = last_node-grid_size;
+       StdOut.println("TEST -2: Is connected(expected: true), actual: " + wqu_uf.connected(last_row,last_node+2));       
+       StdOut.println("TEST -2: Is connected(expected: true), actual: " + wqu_uf.connected(last_row+1,last_node+2)); 
+       StdOut.println("TEST -2: Is connected(expected: true), actual: " + wqu_uf.connected(last_row+2,last_node+2));       
+   }
+   
+   public static void UT_Test3()
+   {
+       int grid_size = 3;
+       Percolation percltn = new Percolation(grid_size);              
+       
+       StdOut.println("TEST -3: Current state of percolation(PRE): " + percltn.numberOfOpenSites());       
+       
+       boolean test_3_result = false;
+
+       test_3_result = percltn.percolates();
+       StdOut.println("TEST -3: Current state of percolation(PRE): " + test_3_result);       
+       
+       for(int i = 0; i < grid_size; ++i)
+       {
+           StdOut.println("TEST -3: Is Open), actual(" + i + "," + 0 +"):"  + percltn.isOpen(i,0));
+           percltn.open(i,0);       
+           StdOut.println("TEST -3: Is Open), actual(" + i + "," + 0 +"):"  + percltn.isOpen(i,0));
+       }
+
+       test_3_result = percltn.percolates();
+       StdOut.println("TEST -3: Current state of percolation(POST): " + test_3_result);       
+   }
+
+   public static void UT_Test4()
+   {
+       int grid_size = 3;
+       Percolation percltn = new Percolation(grid_size);       
+
+       StdOut.println("Test0: No default open sites:" + 
+                      (percltn.numberOfOpenSites()==0? "PASS" : "FAIL"));
+   
+   }
+
+   public static void  UT_Test5(int size, int row, int col)
+   {
+       int grid_size = size;
+       Percolation percltn = new Percolation(grid_size);       
+
+       try 
+       {
+           percltn.open(row,col);
+           percltn.isOpen(row,col);
+           percltn.isFull(row,col);
+       }
+       catch(java.lang.IllegalArgumentException e)
+       {
+           StdOut.println("Test1: Input params validation: PASS");
+       }
+       catch(java.lang.Exception e)
+       {
+           StdOut.println("Test1: Input param validation: FAIL");
+       }   
+   }
+   
+   public static void UT_Test6()
+   {
+       int grid_size = 3;
+       Percolation percltn = new Percolation(grid_size);       
+       
+       //
+       // Test2 - Check number of default open sites 
+       //        
+       boolean test2_result = percltn.numberOfOpenSites() == 0;   
+       StdOut.println("Test2: Default number of open sites: " + 
+                      (test2_result ? "PASS" : "FAIL"));
+       
+                      
+       //
+       // Test3 - Default and updated site state
+       //
+       boolean test3_result = percltn.isOpen(0,0);
+       StdOut.println("Test3a: Default site state(0,0), closed: " + 
+                      (!test3_result ? "PASS" : "FAIL"));
+
+       percltn.open(0,0);
+                      
+       test3_result = percltn.isOpen(0,0);
+       StdOut.println("Test3b: Updated site state(0,0), open: " + 
+                      (test3_result ? "PASS" : "FAIL"));
+    
+    
+       //
+       // Test4 - Default state of percolation in grid
+       //
+       boolean test4_result = percltn.percolates();
+       StdOut.println("Test4: Default state of percolation: " + 
+                      (!test4_result ? "PASS" : "FAIL"));              
+   }
+   
+   public static void Run_Percolation(int size)
+   {
+       int grid_size = size;
+       Percolation percltn = new Percolation(grid_size);             
+       
+       // percltn.Debug_Dump_Grid_State();
+       
+       int x,y;
+       while (!percltn.percolates())
+       {
+           x = StdRandom.uniform(1000) % (grid_size);
+           y = StdRandom.uniform(1000) % (grid_size);
+           percltn.open(x,y);
+       }   
+       int open_sites = percltn.numberOfOpenSites();
+       float pVal = ((float) open_sites / (float)(grid_size*grid_size) );
+       
+       StdOut.println("Test7: Percolation size: " + open_sites + ", probability: " + pVal);              
+       
+       // percltn.Debug_Dump_Grid_State();
+   }
+
+   public static void UT_Test8()
+   {
+       int grid_size = 10;
+       boolean numbers[] = new boolean[grid_size];
+       for(int i=0; i<grid_size; i++)
+           numbers[i]=false;
+       
+       for(int i=0; i<100; i++)
+       {
+           int x = StdRandom.uniform(1000) % (grid_size);
+           numbers[x]=true;
+       }
+
+       for(int i=0; i<grid_size; i++)
+       {
+           if(!numbers[i])
+           StdOut.println("Random  failed at:" + i);              
+       }
+   }   
+   
+   public static void main(String[] args)   // test client (optional)
+   {
+       /*
+       UT_Test1();
+       UT_Test2();
+       UT_Test3();
+       UT_Test4();
+       UT_Test5(3, -1,-1);
+       UT_Test5(3, 3, 3);
+       UT_Test5(3, 3, 0);
+       UT_Test5(3, 0, 3);
+       UT_Test6();
+       UT_Test7();
+       UT_Test8();
+       */
+       long t1 = System.currentTimeMillis();
+       Run_Percolation(1000);
+       t1 = System.currentTimeMillis()-t1;
+       StdOut.println("Time taken:" + t1);
+   }
+}
