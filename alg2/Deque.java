@@ -16,10 +16,10 @@ public class Deque<Item> implements Iterable<Item>
 		   next = null;
 		   prev = null;
 	   }	   
-   }
-   
+   }   
    private node head = null;		
    private node tail = head;				// always point to last node, so tail->next == null
+   
    private Integer size = 0;   
    
    public Deque()                           // construct an empty deque

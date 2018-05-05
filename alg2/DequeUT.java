@@ -5,7 +5,7 @@ public class DequeUT
 {
    public static void utCheckCornerCases()
    {
-	   StdOut.println("Calling utCheckCornerCases...");
+	   StdOut.println("calling utCheckCornerCases...");
 	   StdOut.println("{");
 	   Deque<Integer> d = new Deque<>();
 	   for (int i = 0; i < 2; ++i)
@@ -51,12 +51,12 @@ public class DequeUT
 	   }
 
 	   StdOut.println("}");	   
-	   StdOut.println("Calling utCheckCornerCases...Done.");
+	   StdOut.println("calling utCheckCornerCases...Done.");
    }
    
    public static void utCheckOneItem()
    {
-	   StdOut.println("Calling utCheckOneItem...");
+	   StdOut.println("calling utCheckOneItem...");
 	   StdOut.println("{");
 	   
 	   Deque<Integer> dq = new Deque<>();
@@ -89,7 +89,7 @@ public class DequeUT
 	   }
 	   
 	   StdOut.println("}");
-	   StdOut.println("Calling utCheckOneItem...Done.");	   
+	   StdOut.println("calling utCheckOneItem...Done.");	   
    }
    
    
