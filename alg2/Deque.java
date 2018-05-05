@@ -2,32 +2,60 @@ import java.util.Iterator;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Deque<Item> implements Iterable<Item> 
-{
-   private Item[] items;
+{     
+   private class node
+   {
+	   Item value;
+	   node next;
+	   node prev;
+	   
+	   public node(Item i)
+	   {
+		   value = i;
+		   
+		   next = null;
+		   prev = null;
+	   }	   
+   }
+   
+   private node head = null;		
+   private node tail = head;				// always point to last node, so tail->next == null
+   private Integer size = 0;   
    
    public Deque()                           // construct an empty deque
    {
-	   // items = (Item[])new Object[1];
+	   // nothing to do here
    }
    
    public boolean isEmpty()                 // is the deque empty?
    {
-	   int itemLength = 0;
-	   if(items != null)
-		   itemLength = items.length;
-	   
-	   return itemLength == 0;
-   }
+	   return size == 0;
+   } 
    
    public int size()                        // return the number of items on the deque
    {
-       return items.length;
-       
+       return size;       
    }
    
    public void addFirst(Item item)          // add the item to the front
    {
 	   throwIfNull(item);
+	   
+	   node tmp = new node(item);
+	   if(size == 0)
+	   {
+		   head = tmp;
+		   tail = head;
+		   
+	   } else {
+		
+		   tmp.next = head;
+		   head.prev = tmp;
+		   
+		   head = tmp;		   
+	   }
+	   
+	   size++;
    }
    
    
@@ -35,30 +63,71 @@ public class Deque<Item> implements Iterable<Item>
    {
 	   throwIfNull(item);
 	   
+	   if(size == 0)
+	   {
+		   addFirst(item);
+		   
+	   } else {
+
+		   node tmp = new node(item);
+		   
+		   tmp.next = tail.next;	// i.e. null
+		   tmp.prev = tail;			// point to current tail
+		   tail.next = tmp;			// point old tail to new tail
+		   
+		   tail = tmp;				// new tail
+		   
+		   size++;
+	   }	   
    }
        
    public Item removeFirst()                // remove and return the item from the front
    {
 	   throwIfEmpty();
+
+	   Item ret = head.value;
+
+	   head = head.next;
+	   if(head != null)
+		   head.prev = null;
+	   else
+		   tail = head;
 	   
-       return null;
+	   --size;
+	   
+       return ret;
    }
        
    public Item removeLast()                 // remove and return the item from the end
    {
 	   throwIfEmpty();
 	   
-       return null;
+	   Item ret = tail.value;
+	   	   
+	   tail = tail.prev;    
+	   if(tail != null )
+		   tail.next = null;
+	   else
+		   head = tail;
+	   
+	   --size;
+	   
+       return ret;
    }
        
    public Iterator<Item> iterator()         // return an iterator over items in order from front to end
    {
-       return new DequeIterator();   
+       return new DequeIterator(head);   
    }
 
    public class DequeIterator implements Iterator<Item>
    {
-	   private Item current;
+	   private node current;
+	   
+	   public DequeIterator(node head)
+	   {		   
+		   current = head;
+	   }
 	   
 	   public boolean hasNext() { return current != null; }
 	   
@@ -66,14 +135,16 @@ public class Deque<Item> implements Iterable<Item>
 	   {
 		   if(!hasNext()) throw new java.util.NoSuchElementException();
 		   
-		   return current;
+		   Item next = current.value;
+		   current = current.next;
+		   
+		   return next;
 	   }
 	   
 	   public void remove() { throw new java.lang.UnsupportedOperationException(); } 
    }
-   
-   // Private methods ======================================================
-   
+
+   // Private methods ======================================================   
    static private void trace(String msg)
    {
        StdOut.println(msg);
@@ -81,8 +152,6 @@ public class Deque<Item> implements Iterable<Item>
    
    private void throwIfNull(Item item)
    {
-	   // Throw a java.lang.IllegalArgumentException if 
-	   // the client calls either addFirst() or addLast() with a null argument.
 	   if(item == null)
 		   throw new java.lang.IllegalArgumentException();
    }
