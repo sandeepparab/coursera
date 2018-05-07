@@ -15,10 +15,9 @@ public class Permutation {
 		
 		RandomizedQueue<String> rq = new RandomizedQueue<String>();	
 		String input;
-
 		try
 		{
-			while(StdIn.hasNextLine())
+			while(!StdIn.isEmpty())
 			{
 				input = StdIn.readString();
 				//StdOut.println(input);
@@ -30,13 +29,18 @@ public class Permutation {
 			
 		}
 		
-		StdOut.println("K: " + k + ", rq.size(): " + rq.size());
+		// StdOut.println("K: " + k + ", rq.size(): " + rq.size());
 		if( k > rq.size() ) return;
 		
 		Iterator<String> itor = rq.iterator();
-		for(int i=0; i<k; i++)
+		for(int i=0; i<k;)
 		{
-			StdOut.println(itor.next());			
+			String temp = itor.next();
+			if(temp != null)
+			{
+				StdOut.println(temp);
+				++i;
+			}
 		}
 	}
 }

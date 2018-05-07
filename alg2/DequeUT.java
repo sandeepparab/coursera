@@ -3,10 +3,15 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class DequeUT
 {
+	private static void trace(String msg)
+	{
+		StdOut.println(msg);		
+	}
+	
    public static void utCheckCornerCases()
    {
-	   StdOut.println("calling utCheckCornerCases...");
-	   StdOut.println("{");
+	   trace("calling utCheckCornerCases...");
+	   trace("{");
 	   Deque<Integer> d = new Deque<>();
 	   for (int i = 0; i < 2; ++i)
 	   {
@@ -15,10 +20,10 @@ public class DequeUT
 			   if(i==1) d.addLast(null);			   
 		   } catch (java.lang.IllegalArgumentException ia) {
 			   
-			   StdOut.println("PASS calling addFirst/addLast(null) - caught IllegalArgumentException");
+			   trace("PASS calling addFirst/addLast(null) - caught IllegalArgumentException");
 		   } catch (java.lang.Exception e) {
 			   
-			   StdOut.println("FAIL calling addFirst/addLast(null) - " + e.getMessage());
+			   trace("FAIL calling addFirst/addLast(null) - " + e.getMessage());
 		   }
 		   
 		   try {
@@ -26,10 +31,10 @@ public class DequeUT
 			   if(i==1) d.removeLast();
 		   } catch (java.util.NoSuchElementException nse) {
 			   
-			   StdOut.println("PASS calling removeFirst/removeLast - caught NoSuchElementException");
+			   trace("PASS calling removeFirst/removeLast - caught NoSuchElementException");
 		   } catch (java.lang.Exception e) {
 			   
-			   StdOut.println("FAIL calling removeFirst/removeLast - " + e.getMessage());
+			   trace("FAIL calling removeFirst/removeLast - " + e.getMessage());
 		   }
 		   
 		   try {
@@ -40,75 +45,75 @@ public class DequeUT
 			   
 		   } catch (java.util.NoSuchElementException nse) {
 			   
-			   StdOut.println("PASS calling next() - caught NoSuchElementException");
+			   trace("PASS calling next() - caught NoSuchElementException");
 		   } catch (java.lang.UnsupportedOperationException  e) {
 			   
-			   StdOut.println("PASS calling remove() - caught UnsupportedOperationException");
+			   trace("PASS calling remove() - caught UnsupportedOperationException");
 		   } catch (java.lang.Exception e) {
 			   
-			   StdOut.println("FAIL calling next/remove() - " + e.getMessage());
+			   trace("FAIL calling next/remove() - " + e.getMessage());
 		   }
 	   }
 
-	   StdOut.println("}");	   
-	   StdOut.println("calling utCheckCornerCases...Done.");
+	   trace("}");	   
+	   trace("calling utCheckCornerCases...Done.");
    }
    
    public static void utCheckOneItem()
    {
-	   StdOut.println("calling utCheckOneItem...");
-	   StdOut.println("{");
+	   trace("calling utCheckOneItem...");
+	   trace("{");
 	   
 	   Deque<Integer> dq = new Deque<>();
 	   
-	   StdOut.println("Default size: " + dq.size());
-	   StdOut.println("Default IsEmpty: " + dq.isEmpty());
+	   trace("Default size: " + dq.size());
+	   trace("Default IsEmpty: " + dq.isEmpty());
 	   
 	   Integer i = 1;
 	   Integer ri = 0;
 	   
 	   dq.addFirst(i);
-	   StdOut.println("Expected size: 1, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 1, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 	   
 	   ri = dq.removeLast();
-	   StdOut.println("addFirst(): " + i + ", removeLast(): " + ri);
+	   trace("addFirst(): " + i + ", removeLast(): " + ri);
 
 	   dq.addLast(2);
-	   StdOut.println("addLast(): " + i + ", removeFirst(): " + ri);
+	   trace("addLast(): " + i + ", removeFirst(): " + ri);
 
 	   ri = dq.removeFirst();
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 
-	   StdOut.println("Iterate through list: ");
+	   trace("Iterate through list: ");
 	   Iterator<Integer> dqIter1 = dq.iterator();
 	   while(dqIter1.hasNext())
 	   {
-		   StdOut.println(dqIter1.next());
+		   trace(""+dqIter1.next());
 	   }
 	   
-	   StdOut.println("}");
-	   StdOut.println("calling utCheckOneItem...Done.");	   
+	   trace("}");
+	   trace("calling utCheckOneItem...Done.");	   
    }
    
    
    public static void utAddRemoveFirsts()
    {
-	   StdOut.println("calling utAddRemoveFirsts...");
-	   StdOut.println("{");
+	   trace("calling utAddRemoveFirsts...");
+	   trace("{");
 	   
 	   Deque<Integer> dq = new Deque<>();
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 	   
 	   // add first
 	   for(int i=0; i < 10; ++i)
 	   {
 		   dq.addFirst(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 	   
 	   
 	   // remove first
@@ -116,36 +121,36 @@ public class DequeUT
 	   {
 		   dq.removeFirst();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 
-	   StdOut.println("Iterate through list: ");
+	   trace("Iterate through list: ");
 	   Iterator<Integer> dqIter1 = dq.iterator();
 	   while(dqIter1.hasNext())
 	   {
-		   StdOut.println(dqIter1.next());
+		   trace(""+dqIter1.next());
 	   }
 	   
-	   StdOut.println("}");
-	   StdOut.println("calling utAddRemoveFirsts...Done.");
+	   trace("}");
+	   trace("calling utAddRemoveFirsts...Done.");
    }
 
    public static void utAddRemoveLasts()
    {
-	   StdOut.println("calling utAddRemoveLasts...");
-	   StdOut.println("{");
+	   trace("calling utAddRemoveLasts...");
+	   trace("{");
 	   
 	   Deque<Integer> dq = new Deque<>();
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 	   
 	   // add last
 	   for(int i=0; i < 10; ++i)
 	   {
 		   dq.addLast(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 	   
 	   
 	   // remove last
@@ -153,36 +158,36 @@ public class DequeUT
 	   {
 		   dq.removeLast();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 
-	   StdOut.println("Iterate through list: ");	   
+	   trace("Iterate through list: ");	   
 	   Iterator<Integer> dqIter1 = dq.iterator();
 	   while(dqIter1.hasNext())
 	   {
-		   StdOut.println(dqIter1.next());
+		   trace(""+dqIter1.next());
 	   }
 	   
-	   StdOut.println("}");
-	   StdOut.println("calling utAddRemoveLasts...Done.");
+	   trace("}");
+	   trace("calling utAddRemoveLasts...Done.");
    }
 
    public static void utAddRemoveMixedup()
    {
-	   StdOut.println("calling utAddRemoveMixedup...");
-	   StdOut.println("{");
+	   trace("calling utAddRemoveMixedup...");
+	   trace("{");
 	   
 	   Deque<Integer> dq = new Deque<>();
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 	   
 	   // add last
 	   for(int i=0; i < 10; ++i)
 	   {
 		   dq.addLast(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 	   
 	   
 	   // remove first
@@ -190,8 +195,8 @@ public class DequeUT
 	   {
 		   dq.removeFirst();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 
 	   
 	   // add first
@@ -199,69 +204,63 @@ public class DequeUT
 	   {
 		   dq.addFirst(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
-	   
-	   
+	   trace("Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
+	   	   
 	   // remove first
 	   for(int i=0; i < 10; ++i)
 	   {
 		   dq.removeLast();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());	   
+	   trace("Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());	   
 	   
-	   StdOut.println("Iterate through list: ");	   
-	   Iterator<Integer> dqIter1 = dq.iterator();
-	   while(dqIter1.hasNext())
-	   {
-		   StdOut.println(dqIter1.next());
-	   }
+	   trace("Iterate through list: ");	   
 
-	   StdOut.println("}");	   
-	   StdOut.println("calling utAddRemoveMixedup...Done.");
+	   trace("}");	   
+	   trace("calling utAddRemoveMixedup...Done.");
    }
 
    public static void utAddRemoveMixedup2()
    {
-	   StdOut.println("calling utAddRemoveMixedup2...");
-	   StdOut.println("{");
+	   trace("calling utAddRemoveMixedup2...");
+	   trace("{");
 	   
 	   Deque<Integer> dq = new Deque<>();
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 	   
 	   // add last
 	   for(int i=0; i < 10; ++i)
 	   {
 		   dq.addLast(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 	   	   
 	   // remove first few
 	   for(int i=0; i < 5; ++i)
 	   {
 		   dq.removeFirst();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 5, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 
 	   // add last few again
 	   for(int i=0; i < 5; ++i)
 	   {
 		   dq.addLast(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 
 	   // remove first all
 	   for(int i=0; i < 10; ++i)
 	   {
 		   dq.removeFirst();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 	   
 	   /////////////////////////////////////
 	   
@@ -270,8 +269,8 @@ public class DequeUT
 	   {
 		   dq.addFirst(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 	   
 	   
 	   // remove first
@@ -279,16 +278,16 @@ public class DequeUT
 	   {
 		   dq.removeLast();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());	   
+	   trace("Expected size: 5, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());	   
 
 	   // add first again
 	   for(int i=0; i < 5; ++i)
 	   {
 		   dq.addFirst(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
+	   trace("Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 	   
 	   
 	   // remove first again
@@ -297,81 +296,52 @@ public class DequeUT
 		   dq.removeLast();
 	   }
 
-	   StdOut.println("Iterate through list: ");
-	   Iterator<Integer> dqIter1 = dq.iterator();
-	   while(dqIter1.hasNext())
-	   {
-		   StdOut.println(dqIter1.next());
-	   }
+	   trace("Iterate through list: ");
 
-	   StdOut.println("}");	   
-	   StdOut.println("calling utAddRemoveMixedup2...Done.");
+	   trace("}");	   
+	   trace("calling utAddRemoveMixedup2...Done.");
    }
 
    public static void utAddRemoveMixedup3_Iterator1()
    {
-	   StdOut.println("calling utAddRemoveMixedup3_Iterator1...");
-	   StdOut.println("{");
+	   trace("calling utAddRemoveMixedup3_Iterator1...");
+	   trace("{");
 	   
 	   Deque<Integer> dq = new Deque<>();
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("1 Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 	   
 	   // add last
 	   for(int i=0; i < 10; ++i)
 	   {
 		   dq.addLast(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
-	   
-	   Iterator<Integer> dqIter1 = dq.iterator();
-	   while(dqIter1.hasNext())
-	   {
-		   StdOut.println(dqIter1.next());
-	   }
+	   trace("2 Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 	   
 	   // remove first few
 	   for(int i=0; i < 5; ++i)
 	   {
 		   dq.removeFirst();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("3 Expected size: 5, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 
-	   dqIter1 = dq.iterator();
-	   while(dqIter1.hasNext())
-	   {
-		   StdOut.println(dqIter1.next());
-	   }
-	   
 	   // add last few again
 	   for(int i=0; i < 5; ++i)
 	   {
 		   dq.addLast(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
-
-	   dqIter1 = dq.iterator();
-	   while(dqIter1.hasNext())
-	   {
-		   StdOut.println(dqIter1.next());
-	   }
+	   trace("4 Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 	   
 	   // remove first all
 	   for(int i=0; i < 10; ++i)
 	   {
 		   dq.removeFirst();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
-	   
-	   dqIter1 = dq.iterator();
-	   while(dqIter1.hasNext())
-	   {
-		   StdOut.println(dqIter1.next());
-	   }
+	   trace("5 Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 	   
 	   /////////////////////////////////////
 	   
@@ -380,60 +350,37 @@ public class DequeUT
 	   {
 		   dq.addFirst(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
-	   
-	   dqIter1 = dq.iterator();
-	   while(dqIter1.hasNext())
-	   {
-		   StdOut.println(dqIter1.next());
-	   }
-	   
+	   trace("6 Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
+	   	   
 	   // remove first
 	   for(int i=0; i < 5; ++i)
 	   {
 		   dq.removeLast();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());	   
-	   
-	   dqIter1 = dq.iterator();
-	   while(dqIter1.hasNext())
-	   {
-		   StdOut.println(dqIter1.next());
-	   }
+	   trace("7 Expected size: 5, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());	   
 	   
 	   // add first again
 	   for(int i=0; i < 5; ++i)
 	   {
 		   dq.addFirst(i);
 	   }
-	   StdOut.println("Expected size: 10, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
-	   
-	   dqIter1 = dq.iterator();
-	   while(dqIter1.hasNext())
-	   {
-		   StdOut.println(dqIter1.next());
-	   }
+	   trace("8 Expected size: 10, Actual size: " + dq.size());
+	   trace("Expected isEmpty: false, Actual isEmpty: " + dq.isEmpty());
 	   
 	   // remove first again
 	   for(int i=0; i < 10; ++i)
 	   {
 		   dq.removeLast();
 	   }
-	   StdOut.println("Expected size: 0, Actual size: " + dq.size());
-	   StdOut.println("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
+	   trace("9 Expected size: 0, Actual size: " + dq.size());
+	   trace("Expected isEmpty: true, Actual isEmpty: " + dq.isEmpty());
 
-	   StdOut.println("Iterate through list: ");
-	   dqIter1 = dq.iterator();
-	   while(dqIter1.hasNext())
-	   {
-		   StdOut.println(dqIter1.next());
-	   }
+	   trace("Iterate through list: ");
 	   
-	   StdOut.println("}");	   
-	   StdOut.println("calling utAddRemoveMixedup3_Iterator...Done.");
+	   trace("}");	   
+	   trace("calling utAddRemoveMixedup3_Iterator...Done.");
 	   
    }
    

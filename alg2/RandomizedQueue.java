@@ -4,11 +4,19 @@ import edu.princeton.cs.algs4.StdRandom;
 
 public class RandomizedQueue<Item> implements Iterable<Item> 
 {
+   private class node
+   {
+	   Item value;
+	   node next;
+	   //node prev;
+	   public node(Item v)
+	   {
+		   value = v;
+	   }
+   }
 
-   private Item[] value = null; 
-   private Boolean[] valid = null;
-   
-   private Integer count = 0;
+   private int count = 0;
+   private node head = null;
    
    public RandomizedQueue()                 // construct an empty randomized queue
    {
@@ -28,40 +36,18 @@ public class RandomizedQueue<Item> implements Iterable<Item>
    {
 	   if (item == null) throw new java.lang.IllegalArgumentException();
 	   
-	   // StdOut.println("count: " + count);	   
-	   if(count == 0)
-	   {		   
-		   value = (Item[]) new Object[1];
-		   valid = new Boolean[1];
-	   } 
+	   node tmp = new node(item);
+	   tmp.next = head;
+	   //tmp.prev = null;
+	   	   
+	   head = tmp;	   	   
 
-	   if(count == value.length)
-	   {
-		   Item[] tempQ = (Item[])new Object[count*2];
-		   Boolean[] tempV = new Boolean[count*2];
-		   int c = 0;
-		   for(int i=0; i < count; ++i)
-		   {
-			   if(valid[i] == true)
-			   {
-				   tempQ[c] = value[i];
-				   tempV[c] = true;
-				   c++;
-			   }
-		   }
-		   value = tempQ;
-		   valid = tempV;
-		   
-		   count = c;
-	   }
+	   count++;
 	   
-	   // StdOut.println("length: " + value.length);
-	   value[count] = item;
-	   valid[count] = true;
-	   
-	   ++count;	   
+	   //StdOut.println("q: index: n/a , Item: " + head.value + ", Count: " + count);
    }
-   
+
+   /*
    private void dump_state()
    {
 	   for(int i=0; i< valid.length; i++)
@@ -69,26 +55,16 @@ public class RandomizedQueue<Item> implements Iterable<Item>
 		   StdOut.println("value[" + i + "]: " + value[i] + ", valid[" + i + "]: " + valid[i]);		   
 	   }
    }
-
+   */
+   
    private int GetRandomIndex()
    {
-	   int index=0;
-	   
-	   StdRandom.setSeed(System.currentTimeMillis());
-	   index = StdRandom.uniform(100) % count;
-	   
 	   // find next valid item to dequeue
-	   int size = (valid.length-1);
+	   int size = count;
 	   
-	   while(valid[index] !=null && valid[index] == false)
-	   {
-		   //StdOut.println("[deque]index: " + index + ", valid: " + valid[index]);
-		   index++;
-		
-		   if(index > size)
-			   index = 0;	   		   
-	   }
-	   
+	   //StdRandom.setSeed(System.currentTimeMillis());
+	   int index = StdRandom.uniform(Integer.MAX_VALUE) % size;
+	   	   
 	   return index;
    }
    
@@ -98,11 +74,36 @@ public class RandomizedQueue<Item> implements Iterable<Item>
 	   
 	   int index = GetRandomIndex();
 	   
-	   valid[index] = false;
-	   Item temp = (Item)value[index];	   
+	   node temp_head = head;
+	   node prev = head;
+	   for(int i = 0; i < index; ++i)
+	   {
+		   prev = head;
+		   head = head.next;
+	   }
+
+	   node ret = head;
+
+	   if(index == 0)
+	   {
+		   head = head.next;
+	   }
+	   else
+	   {
+		   prev.next = head.next;
+		   head = temp_head;
+	   }
 	   --count;
+
+	   // debug
+	   //StdOut.println("dq: Index: " + index + ", Item: " + ret.value + ", Count: " + count);
+	   //for(node temp = head; temp!=null; temp=temp.next)
+	   //{
+	   //	   StdOut.println(">" + temp.value);
+	   //}
+	   // end debug
 	   
-       return temp;
+	   return ret.value;
    }
 
    public Item sample()                     // return a random item (but do not remove it)
@@ -111,36 +112,81 @@ public class RandomizedQueue<Item> implements Iterable<Item>
 
 	   int index = GetRandomIndex();
 	   
-	   return (Item)value[index];
+	   node temp = head;
+	   for(int i = 0; i < index; ++i)
+	   {
+		   temp = temp.next;
+	   }	
+
+	   return temp.value;
    }
 
    public Iterator<Item> iterator()         // return an independent iterator over items in random order
    {
-	   return new RandomizedQueueIterator(value);
+	   return new RandomizedQueueIterator(head, count);
    }
    
-   public class RandomizedQueueIterator implements Iterator<Item>
+   private class RandomizedQueueIterator implements Iterator<Item>
    {
-	   private Item[] current;
-	   private Integer index;
+	   private node list;
+	   private int count;
+	   private int size;
+	   private node start; 
 	   
-	   public RandomizedQueueIterator(Item[] head)
+	   public RandomizedQueueIterator(node l, int c)
 	   {		   
-		   current = head;
-		   index = 0;
+		   list = l;
+		   count = c;
+		   size = c;
+		   if(c > 0)
+		   {			   
+			   int index = GetRandomIndex();
+	
+			   node start = list;
+			   for(int i = 0; i < index;)
+			   {
+				   start = start.next;
+				   if( start != null)
+					   i++;			   
+				   else
+					   start = list;		// we past last item in the list
+			   }
+		   }
+	   }
+
+	   private int GetRandomIndex()
+	   {
+		   // find next valid item to dequeue
+		   int size = count;
+		   
+		   //StdRandom.setSeed(System.currentTimeMillis());
+		   int index = StdRandom.uniform(size) % size;
+		   	   
+		   return index;
 	   }
 	   
-	   public boolean hasNext() { return current != null; }
+	   public boolean hasNext() { if(count > 0) return true; else return false; }
 	   
 	   public Item next()
 	   {
 		   if(!hasNext()) throw new java.util.NoSuchElementException();
 		   
-		   int index = GetRandomIndex();
+		   // Item value = start.value;
 		   
-		   Item next = (Item)value[index];
-		   
-		   return next;
+		   if(count > 0)
+		   {
+			   if(start == null || start.next == null)
+			   {
+				   start = list;	// reset start
+				   
+			   } else {
+				   
+				   start = start.next;
+			   }
+			   
+		   }		   
+		   --count;
+		   return start.value;
 	   }
 	   
 	   public void remove() { throw new java.lang.UnsupportedOperationException(); } 
@@ -148,6 +194,6 @@ public class RandomizedQueue<Item> implements Iterable<Item>
 
    public static void main(String[] args)   // unit testing (optional)
    {
-	   StdOut.println("RandomizedQueue...Done.");
+	   //StdOut.println("RandomizedQueue...Done.");
    }
 }

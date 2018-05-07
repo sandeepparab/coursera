@@ -120,7 +120,7 @@ public class Deque<Item> implements Iterable<Item>
        return new DequeIterator(head);   
    }
 
-   public class DequeIterator implements Iterator<Item>
+   private class DequeIterator implements Iterator<Item>
    {
 	   private node current;
 	   
