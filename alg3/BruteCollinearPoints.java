@@ -1,6 +1,9 @@
-import java.util.Date;
-
+//import java.util.Date;
 import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.In;
+
+//import java.util.*;
 
 public class BruteCollinearPoints 
 {
@@ -14,7 +17,9 @@ public class BruteCollinearPoints
 		
 		if(points.length < 4) throw new java.lang.IllegalArgumentException();
 		
-		plist = points;		   
+		plist = points;
+		
+		doWork();
 	}
 	   
 	public int numberOfSegments()        // the number of line segments
@@ -34,13 +39,13 @@ public class BruteCollinearPoints
 			throw new java.lang.IllegalArgumentException();
 	}
 	
-	
-	public LineSegment[] segments()                // the line segments
+	private void doWork()
 	{
 		if(segments == null)
 		{
 			int count = plist.length;
 			int scount = 0;
+			
 			// process points
 			for(int p=0; p < count-3; p++)
 			{
@@ -86,8 +91,41 @@ public class BruteCollinearPoints
 					}	
 				}				
 			}
-		}
-		
+		}		
+	}
+	
+	public LineSegment[] segments()                // the line segments
+	{		
 		return segments;
-	}	
+	}
+	
+	public static void main(String[] args) {
+
+	    // read the n points from a file
+	    In in = new In(args[0]);
+	    int n = in.readInt();
+	    Point[] points = new Point[n];
+	    for (int i = 0; i < n; i++) {
+	        int x = in.readInt();
+	        int y = in.readInt();
+	        points[i] = new Point(x, y);
+	    }
+
+	    // draw the points
+	    StdDraw.enableDoubleBuffering();
+	    StdDraw.setXscale(0, 32768);
+	    StdDraw.setYscale(0, 32768);
+	    for (Point p : points) {
+	        p.draw();
+	    }
+	    StdDraw.show();
+
+	    // print and draw the line segments
+	    BruteCollinearPoints collinear = new BruteCollinearPoints(points);
+	    for (LineSegment segment : collinear.segments()) {
+	        StdOut.println(segment);
+	        segment.draw();
+	    }
+	    StdDraw.show();
+	}		
 }
