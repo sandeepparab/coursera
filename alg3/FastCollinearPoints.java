@@ -26,48 +26,6 @@ public class FastCollinearPoints
 		}
 	}
 		
-	private static class MergeBU
-	{
-		private static Comparable<PointInfo>[] aux;
-		
-		@SuppressWarnings("unchecked")		
-		public static void sort(Comparable<PointInfo>[] arr)
-		{
-			int n = arr.length;
-		
-			aux = (Comparable<PointInfo>[])new Comparable[n];
-			
-			for(int sz=1; sz<n; sz+=sz)
-			{
-				for(int lo=0; lo<n-sz; lo=sz+sz)
-				{
-					merge(arr, lo, lo-sz+1, Math.min(lo+sz+sz-1, n-1));					
-				}				
-			}		
-		}
-		private static boolean less(Comparable<PointInfo> a, Comparable<PointInfo> b )
-		{
-			return (a.compareTo((PointInfo)b) == -1);
-		}
-		
-		private static void merge(Comparable<PointInfo>[] arr, int lo, int mid, int hi)
-		{
-			// copy
-			for(int k=lo; k<= hi; k++)
-				aux[k] = arr[k];
-			
-			// merge
-			int i=lo, j=mid+1;
-			for(int k=lo; k<=hi; k++)
-			{
-				if(i > mid) 				  arr[k] = aux[j++];
-				else if(k > hi)  			  arr[k] = aux[i++];
-				else if(less(aux[j], aux[i])) arr[k] = aux[j++];
-				else						  arr[k] = aux[i++];
-			}
-		}
-		
-	}
 	
 	private void doWork()
 	{
