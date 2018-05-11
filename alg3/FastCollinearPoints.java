@@ -42,7 +42,7 @@ public class FastCollinearPoints
 			}
 		
 			// sort slopes
-			MergeBU.sort(pi);
+			// MergeBU.sort(pi);
 			
 			// check points with same slopes to segments list
 			
